@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<BeFit.Models.ExerciseType>
 
 @{
-    ViewData["Title"] = "Types of exercises";
+    ViewData["Title"] = "Rodzaje ćwiczeń";
 }
 
 <h1>Rodzaje ćwiczeń</h1>
@@ -9,7 +9,7 @@
 <p>
     @if (User.IsInRole("Admin"))
     {
-        <a asp-action="Create">Create new</a>
+        <a asp-action="Create">Utwórz nowe</a>
     }
 </p>
 <table class="table">
@@ -30,9 +30,9 @@
             <td>
                 @if (User.IsInRole("Admin"))
                 {
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edytuj</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id">Usuń</a>
+                    <a asp-action="Details" asp-route-id="@item.Id">Szczegóły</a>
                 }
             </td>
         </tr>

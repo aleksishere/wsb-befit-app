@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<BeFit.Models.ExerciseEntry>
 
 @{
-    ViewData["Title"] = "Exercises list";
+    ViewData["Title"] = "Lista ćwiczeń";
 }
 
-<h1>Exercises list</h1>
+<h1>Lista ćwiczeń</h1>
 
 <p>
-    <a asp-action="Create">Create new</a>
+    <a asp-action="Create">Utwórz nowe</a>
 </p>
 <table class="table">
     <thead>
@@ -49,9 +49,9 @@
                     @Html.DisplayFor(modelItem => item.RepetitionsPerSet)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edytuj</a>
+                <a asp-action="Details" asp-route-id="@item.Id">Szczegóły</a>
+                <a asp-action="Delete" asp-route-id="@item.Id">Usuń</a>
             </td>
         </tr>
 }

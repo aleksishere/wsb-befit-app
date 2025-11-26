@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<BeFit.Models.TrainingSession>
 
 @{
-    ViewData["Title"] = "Training sessions";
+    ViewData["Title"] = "Sesje treningowe";
 }
 
-<h1>Training sessions</h1>
+<h1>Sesje treningowe</h1>
 
 <p>
-    <a asp-action="Create">Create new</a>
+    <a asp-action="Create">Utwórz nowe</a>
 </p>
 <table class="table">
     <thead>
@@ -31,9 +31,9 @@
                 @Html.DisplayFor(modelItem => item.EndTime)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edytuj</a>
+                <a asp-action="Details" asp-route-id="@item.Id">Szczegóły</a>
+                <a asp-action="Delete" asp-route-id="@item.Id">Usuń</a>
             </td>
         </tr>
 }

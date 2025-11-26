@@ -96,6 +96,94 @@ public class ExerciseEntriesController : Controller
         return View(exerciseEntry);
     }
     
+    // GET: ExerciseEntries/Edit/5
+    public async Task<IActionResult> Edit(int? id)
+    {
+        if (id == null) return NotFound();
+
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        // Pobieramy wpis wraz z sesją, aby sprawdzić uprawnienia
+        var exerciseEntry = await _context.ExerciseEntries
+            .Include(e => e.TrainingSession) 
+            .FirstOrDefaultAsync(m => m.Id == id);
+
+        if (exerciseEntry == null) return NotFound();
+
+        // ZABEZPIECZENIE: Czy ten wpis należy do mnie?
+        if (exerciseEntry.TrainingSession.UserId != userId) return Forbid();
+
+        // Dropdowny: Sortowane i filtrowane (tylko moje sesje)
+        ViewData["ExerciseTypeId"] = new SelectList(
+            _context.ExerciseTypes.OrderBy(e => e.Name), 
+            "Id", "Name", exerciseEntry.ExerciseTypeId);
+            
+        ViewData["TrainingSessionId"] = new SelectList(
+            _context.TrainingSessions
+                .Where(s => s.UserId == userId)
+                .OrderByDescending(s => s.StartTime), 
+            "Id", "StartTime", exerciseEntry.TrainingSessionId);
+            
+        return View(exerciseEntry);
+    }
+
+    // POST: ExerciseEntries/Edit/5
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(int id, ExerciseEntry exerciseEntry)
+    {
+        if (id != exerciseEntry.Id) return NotFound();
+        
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        // 1. ZABEZPIECZENIE: Sprawdź, czy docelowa sesja należy do użytkownika
+        var isMySession = await _context.TrainingSessions
+            .AnyAsync(s => s.Id == exerciseEntry.TrainingSessionId && s.UserId == userId);
+
+        if (!isMySession) return Forbid();
+
+        // 2. ZABEZPIECZENIE: Sprawdź, czy edytowany wpis (oryginalny) należy do użytkownika
+        // (zapobiega edycji cudzego wpisu przez zmianę ID w narzędziach deweloperskich)
+        var originalEntryOwnerId = await _context.ExerciseEntries
+            .Where(e => e.Id == id)
+            .Select(e => e.TrainingSession.UserId)
+            .FirstOrDefaultAsync();
+
+        if (originalEntryOwnerId != userId) return Forbid();
+
+        // Czyszczenie walidacji
+        ModelState.Remove(nameof(exerciseEntry.TrainingSession));
+        ModelState.Remove(nameof(exerciseEntry.ExerciseType));
+
+        if (ModelState.IsValid)
+        {
+            try
+            {
+                _context.Update(exerciseEntry);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ExerciseEntryExists(exerciseEntry.Id)) return NotFound();
+                else throw;
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        // Przywracanie dropdownów w razie błędu walidacji
+        ViewData["ExerciseTypeId"] = new SelectList(
+            _context.ExerciseTypes.OrderBy(e => e.Name), 
+            "Id", "Name", exerciseEntry.ExerciseTypeId);
+            
+        ViewData["TrainingSessionId"] = new SelectList(
+            _context.TrainingSessions
+                .Where(s => s.UserId == userId)
+                .OrderByDescending(s => s.StartTime), 
+            "Id", "StartTime", exerciseEntry.TrainingSessionId);
+            
+        return View(exerciseEntry);
+    }
+    
     public async Task<IActionResult> Delete(int? id)
     {
         if (id == null)

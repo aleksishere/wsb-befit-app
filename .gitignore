@@ -1,6 +1,7 @@
 # --- Build & Tymczasowe pliki .NET ---
 [Bb]in/
 [Oo]bj/
+[Mm]igrations/
 
 # --- Baza Danych (SQLite) ---
 # Bardzo ważne! Nie chcemy wrzucać bazy z danymi użytkowników
