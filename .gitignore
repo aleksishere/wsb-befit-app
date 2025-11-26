@@ -1,0 +1,31 @@
+# --- Build & Tymczasowe pliki .NET ---
+[Bb]in/
+[Oo]bj/
+
+# --- Baza Danych (SQLite) ---
+# Bardzo ważne! Nie chcemy wrzucać bazy z danymi użytkowników
+*.db
+*.db-shm
+*.db-wal
+
+# --- Ustawienia IDE (Rider / IntelliJ) ---
+# To są Twoje prywatne ustawienia edytora
+.idea/
+*.sln.iml
+
+# --- Ustawienia IDE (Visual Studio / VS Code) ---
+# Na wypadek gdyby ktoś inny otwierał to w VS
+.vs/
+.vscode/
+*.user
+*.suo
+
+# --- Systemowe (macOS / Windows) ---
+.DS_Store
+Thumbs.db
+
+# --- Logi i pliki tymczasowe ---
+*.log
+appsettings.Development.json
+
+.idea/
